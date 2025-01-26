@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Update the system package index
+apt update
+
+# Install necessary dependencies
+apt install -y wget gnupg fontconfig openjdk-17-jre
+
+# Verify Java installation
+java -version
+
+# Add Jenkins repository key
+wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+
+# Add Jenkins repository to sources list
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+# Update package index again to include Jenkins repository
+apt update
+
+# Install Jenkins
+apt install -y jenkins
+
+# Enable Jenkins service to start on boot
+systemctl enable jenkins
+
+# Start Jenkins service
+systemctl start jenkins
+
+# Verify Jenkins status
+systemctl status jenkins
+
+# Output message to access Jenkins on the web browser
+echo "Jenkins is now installed and running. Access it at http://<your-server-ip>:8080"
